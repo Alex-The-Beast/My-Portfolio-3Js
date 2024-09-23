@@ -1,4 +1,4 @@
-import React, { useRef, useState } from  'react'
+import React, { useRef, useState ,useEffect} from  'react'
 import emailjs from '@emailjs/browser'
 const Contact=()=>{
     const formRef=useRef()
@@ -52,6 +52,28 @@ const Contact=()=>{
 
     }
 
+
+
+    const [rows, setRows] = useState(5); // Default rows based on screen size
+
+  // Function to handle the window resize
+  const handleResize = () => {
+    const screenWidth = window.innerWidth;
+    setRows(screenWidth < 768 ? 1 : 5); // 3 rows for small screens, 5 rows for larger screens
+  };
+
+  useEffect(() => {
+    // Set rows based on initial screen size
+    handleResize();
+
+    // Add event listener for screen resizing
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
     //service_yjviezr
     return (
         <section>
@@ -102,7 +124,7 @@ const Contact=()=>{
                                     value={form.message}
                                     onChange={handleChange}
                                     required
-                                    rows={1}
+                                    rows={rows}
                                     className="field-input"
                                     placeholder="Share your thoughts or inquiries..."
                                            />
