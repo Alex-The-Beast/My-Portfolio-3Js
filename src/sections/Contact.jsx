@@ -59,7 +59,7 @@ const Contact=()=>{
   // Function to handle the window resize
   const handleResize = () => {
     const screenWidth = window.innerWidth;
-    setRows(screenWidth < 768 ? 1 : 5); // 3 rows for small screens, 5 rows for larger screens
+    setRows(screenWidth < 768 ? 1 : 4); // 3 rows for small screens, 5 rows for larger screens
   };
 
   useEffect(() => {
@@ -76,14 +76,14 @@ const Contact=()=>{
 
     //service_yjviezr
     return (
-        <section>
+        <section id="contact">
             <div className='c-space my-20'>
                 <div className='relative min-h-screen flex items-center justify-center
                 flex-col'>
                     <img src="/assets/terminal.png" alt='terminal'className='absolute 
                     inset-0 min-h-screen' />
                     <div className='contact-container'>
-                        <h3 className="head-text">Let's talk</h3>
+                        <h3 className="head-text sm:mt-20">Let's talk</h3>
                         <p className="text-lg text-white-600 mt-3">Whether you're looking to build 
                             a new website, improve your existing platform, or bring a unique project to 
                             life, I'm here to help.

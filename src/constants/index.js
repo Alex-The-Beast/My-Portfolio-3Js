@@ -58,8 +58,8 @@ export const navLinks = [
   
   export const myProjects = [
     {
-      title: 'Arnavs Blog - A Chatting Platform',
-      desc: 'Arnavs Blog is a revolutionary Software-as-a-Service platform that transforms the way of chatting. With advanced AI-powered features like text-to-multiple-voices functionality, it allows creators to generate diverse voiceovers from a single text input.',
+      title: "Arnav's Blog - A Chatting Platform",
+      desc: "Arnav's Blog is a revolutionary Software-as-a-Service platform that transforms the way of chatting. With advanced AI-powered features like text-to-multiple-voices functionality, it allows creators to generate diverse voiceovers from a single text input.",
       subdesc:
         'Built as a unique Software-as-a-Service app with React.js, Tailwind CSS, JavaScript, Socket.io, Express, Mongodb, Arnavs Blog is designed for optimal performance and scalability.',
       href: 'https://github.com/Alex-The-Beast/mern-blog',
@@ -95,11 +95,11 @@ export const navLinks = [
       ],
     },
     {
-      title: 'LiveDoc - Real-Time Google Docs Clone',
-      desc: 'LiveDoc is a powerful collaborative app that elevates the capabilities of real-time document editing. As an enhanced version of Google Docs, It supports millions of collaborators simultaneously, ensuring that every change is captured instantly and accurately.',
+      title: 'Weather App - Real-Time Weather update of Different Location ',
+      desc: 'Weather App is a powerful collaborative app that elevates the capabilities of real-time Weather information. As an enhanced version of weather app, It supports millions of collaborators simultaneously, ensuring that every change is captured instantly and accurately.',
       subdesc:
-        'With LiveDoc, users can experience the future of collaboration, where multiple contributors work together in real time without any lag, by using Next.js and Liveblocks newest features.',
-      href: 'https://www.youtube.com/watch?v=y5vE8y_f_OM',
+        'With Weather App, users can experience the future of collaboration, where multiple contributors work together in real time without any lag, by using Next.js and Liveblocks newest features.',
+      href: 'https://github.com/Alex-The-Beast/mern-blog',
       texture: '/textures/project/project2.mp4',
       logo: '/assets/project-logo2.png',
       logoStyle: {
@@ -136,7 +136,7 @@ export const navLinks = [
       desc: 'An innovative healthcare platform designed to streamline essential medical processes. It simplifies patient registration, appointment scheduling, and medical record management, providing a seamless experience for both healthcare providers and patients.',
       subdesc:
         'With a focus on efficiency, CarePulse integrantes complex forms and SMS notifications, by using Next.js, Appwrite, Twillio and Sentry that enhance operational workflows.',
-      href: 'https://www.youtube.com/watch?v=lEflo_sc82g',
+        href: 'https://github.com/Alex-The-Beast/mern-blog',
       texture: '/textures/project/project3.mp4',
       logo: '/assets/project-logo3.png',
       logoStyle: {
@@ -175,7 +175,7 @@ export const navLinks = [
       desc: 'Horizon is a comprehensive online banking platform that offers users a centralized finance management dashboard. It allows users to connect multiple bank accounts, monitor real-time transactions, and seamlessly transfer money to other users.',
       subdesc:
         'Built with Next.js 14 Appwrite, Dwolla and Plaid, Horizon ensures a smooth and secure banking experience, tailored to meet the needs of modern consumers.',
-      href: 'https://www.youtube.com/watch?v=PuOVqP_cjkE',
+        href: 'https://github.com/Alex-The-Beast/mern-blog',
       texture: '/textures/project/project4.mp4',
       logo: '/assets/project-logo4.png',
       logoStyle: {
@@ -208,11 +208,11 @@ export const navLinks = [
       ],
     },
     {
-      title: 'Imaginify - AI Photo Manipulation App',
-      desc: 'Imaginify is a groundbreaking Software-as-a-Service application that empowers users to create stunning photo manipulations using AI technology. With features like AI-driven image editing, a payments system, and a credits-based model.',
+      title: 'HealthCare Chatbot - AI Healthcare Chatbot',
+      desc: 'An AI-powered healthcare chatbot designed to provide instant medical advice, answer health-related queries, schedule appointments, and offer personalized wellness recommendations.',
       subdesc:
-        'Built with Next.js 14, Cloudinary AI, Clerk, and Stripe, Imaginify combines cutting-edge technology with a user-centric approach. It can be turned into a side income or even a full-fledged business.',
-      href: 'https://www.youtube.com/watch?v=Ahwoks_dawU',
+        ' Built with NLP, machine learning, and healthcare APIs, the chatbot ensures real-time responses, secure data handling, and personalized interactions',
+      href: 'https://github.com/Alex-The-Beast',
       texture: '/textures/project/project5.mp4',
       logo: '/assets/project-logo5.png',
       logoStyle: {
@@ -260,28 +260,28 @@ export const navLinks = [
   export const workExperiences = [
     {
       id: 1,
-      name: 'Framer',
-      pos: 'Lead Web Developer',
-      duration: '2022 - Present',
-      title: "Framer serves as my go-to tool for creating interactive prototypes. I use it to bring designs to  life, allowing stakeholders to experience the user flow and interactions before development.",
+      name: 'SMVDU Tech Community',
+      pos: 'Junior Web Developer',
+      duration: '2024 - Present',
+      title: "Building the Future of the Web: A Junior Web Developer's Journey in SMVDU Tech Community, Crafting Responsive, Scalable, and User-Centric Solutions with Modern Web Technologies and Collaborative Innovation",
       icon: '/assets/framer.svg',
       animation: 'victory',
     },
     {
       id: 2,
-      name: 'Figma',
-      pos: 'Web Developer',
-      duration: '2020 - 2022',
-      title: "Figma is my collaborative design platform of choice. I utilize it to work seamlessly with team members and clients, facilitating real-time feedback and design iterations. Its cloud-based.",
+      name: 'The Future Project',
+      pos: 'Data Structure Analyst',
+      duration: '2023 - April  2024',
+      title: "Mastering Data Structures and Algorithms in Java: A Comprehensive Journey to Efficient Problem-Solving and Optimized Code Development",
       icon: '/assets/figma.svg',
       animation: 'clapping',
     },
     {
       id: 3,
-      name: 'Notion',
-      pos: 'Junior Web Developer',
-      duration: '2019 - 2020',
-      title: "Notion helps me keep my projects organized. I use it for project management, task tracking, and as a central hub for documentation, ensuring that everything from design notes to.",
+      name: 'SMVDU',
+      pos: 'Learner',
+      duration: '2023',
+      title: "SMVDU: Empowering Students with Holistic Learning, Cutting-Edge Technologies, and Opportunities for Personal and Professional Growth in a Dynamic Environment",
       icon: '/assets/notion.svg',
       animation: 'salute',
     },
