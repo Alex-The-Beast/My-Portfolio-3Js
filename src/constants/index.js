@@ -2,22 +2,242 @@ export const navLinks = [
     {
       id: 1,
       name: 'Home',
-      href: '#home',
-    },
-    {
-      id: 2,
-      name: 'About',
-      href: '#about',
+      href: '/',
+      icon: 'home',
     },
     {
       id: 3,
       name: 'Work',
-      href: '#work',
+      href: '/work',
+      icon: 'work',
     },
     {
       id: 4,
+      name: 'Latest Updates',
+      href: '/updates',
+      icon: 'updates',
+    },
+    {
+      id: 5,
+      name: 'Blog',
+      href: '/blog',
+      icon: 'blog',
+    },
+    {
+      id: 6,
       name: 'Contact',
-      href: '#contact',
+      href: '/contact',
+      icon: 'contact',
+    },
+  ];
+
+  export const learningUpdates = [
+    {
+      id: 1,
+      date: 'June 04, 2026',
+      title: 'DSA revision: sliding window and two pointers',
+      category: 'DSA',
+      status: 'In progress',
+      summary:
+        'Revised fixed-size and variable-size window patterns, then compared them with two pointer problems where the answer depends on sorted input or a shrinking boundary.',
+      notes: [
+        'Sliding window works best when the active range is contiguous and the state can be updated in O(1).',
+        'Two pointers are cleaner when movement is guided by an ordered condition, such as sum too small or too large.',
+        'Revision target: solve 5 mixed problems without looking at hints, then write the pattern trigger for each one.',
+      ],
+      focus: ['arrays', 'patterns', 'revision'],
+    },
+    {
+      id: 2,
+      date: 'June 03, 2026',
+      title: 'Cloud notes: IAM basics and least privilege',
+      category: 'Cloud',
+      status: 'Reviewed',
+      summary:
+        'Mapped users, groups, roles, and policies into a simple mental model for AWS access control. The key idea is to grant only the actions a service or person actually needs.',
+      notes: [
+        'Roles are better than long-lived access keys for services because credentials can be temporary.',
+        'Policies should be read by action, resource, and condition instead of treated as a blob of JSON.',
+        'Revision target: create examples for S3 read-only access and EC2 start/stop access.',
+      ],
+      focus: ['aws', 'iam', 'security'],
+    },
+    {
+      id: 3,
+      date: 'June 02, 2026',
+      title: 'AI/ML: bias, variance, and model fit',
+      category: 'AI/ML',
+      status: 'Draft',
+      summary:
+        'Reviewed why high bias underfits, high variance overfits, and regularization helps control model complexity without manually removing every feature.',
+      notes: [
+        'Training error and validation error together tell a clearer story than accuracy alone.',
+        'Regularization is a constraint on complexity, not a magic improvement button.',
+        'Revision target: draw the error curves and explain them in plain language.',
+      ],
+      focus: ['ml-basics', 'regularization', 'metrics'],
+    },
+  ];
+
+  export const blogPosts = [
+    {
+      id: 1,
+      slug: 'customize-shadcn-tooltip-arrows',
+      title: "Hacky Way to Customize Shadcn's Tooltip Arrows",
+      excerpt:
+        "A workaround for displaying a custom SVG arrow in shadcn's tooltip, inspired by Radix primitives and small CSS decisions.",
+      date: 'December 15, 2024',
+      readTime: '5 min read',
+      image: '/assets/grid1.png',
+      tags: ['react', 'css', 'shadcn'],
+      href: '/blog/customize-shadcn-tooltip-arrows',
+      content: [
+        {
+          type: 'paragraph',
+          body:
+            'Shadcn is a go-to copy-paste component system for React projects. The Tooltip component is built on top of Radix UI, which gives you solid behavior while still letting you own the styling.',
+        },
+        {
+          type: 'heading',
+          heading: 'Introduction',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'The problem starts when a default primitive solves behavior beautifully, but the visual language of your product needs one extra custom detail.',
+        },
+        {
+          type: 'image',
+          src: '/assets/grid1.png',
+          alt: 'A dark interface card preview',
+          caption: 'Keep the interaction primitive intact, then style the visible surface around it.',
+        },
+        {
+          type: 'heading',
+          heading: 'Adding Tooltip Arrows',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'The useful trick is to include the Radix Tooltip Arrow inside the tooltip content and then style it alongside your content surface. That keeps the arrow attached to the primitive instead of faking it with unrelated markup.',
+        },
+        {
+          type: 'code',
+          language: 'jsx',
+          code: `<Tooltip.Content className="tooltip-content">
+  Helpful context
+  <Tooltip.Arrow className="tooltip-arrow" />
+</Tooltip.Content>`,
+        },
+        {
+          type: 'heading',
+          heading: 'Custom SVG Arrow',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'When the default arrow is not enough, use a small SVG shape or a carefully positioned pseudo-element that shares the same fill and border tone as the tooltip. The result feels native to your theme without fighting the positioning logic.',
+        },
+        {
+          type: 'callout',
+          body: 'The best customization is usually the one that keeps accessibility and positioning owned by the original primitive.',
+        },
+      ],
+    },
+    {
+      id: 2,
+      slug: 'dark-ui-that-feels-sharp',
+      title: 'Designing Dark UI That Feels Sharp, Not Heavy',
+      excerpt:
+        'A practical breakdown of spacing, glass layers, contrast, and motion choices for modern developer websites.',
+      date: 'May 24, 2026',
+      readTime: '4 min read',
+      image: '/assets/grid3.png',
+      tags: ['design', 'tailwind'],
+      href: '/blog/dark-ui-that-feels-sharp',
+      content: [
+        {
+          type: 'heading',
+          heading: 'Contrast First',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'Dark interfaces work best when the hierarchy is built with contrast, spacing, and restrained borders instead of stacking many heavy panels.',
+        },
+        {
+          type: 'list',
+          items: [
+            'Use one strong accent color for action and focus.',
+            'Keep card backgrounds close to black so white text stays sharp.',
+            'Let spacing create calm before adding more decoration.',
+          ],
+        },
+        {
+          type: 'image',
+          src: '/assets/grid3.png',
+          alt: 'Dark UI layout preview',
+          caption: 'A quiet surface makes blue accents feel intentional instead of loud.',
+        },
+        {
+          type: 'heading',
+          heading: 'Motion With Purpose',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'Small hover states, subtle gradients, and focused reveal effects make the page feel alive while keeping the reading experience calm.',
+        },
+        {
+          type: 'quote',
+          body: 'Motion should clarify state, not compete with the content.',
+        },
+      ],
+    },
+    {
+      id: 3,
+      slug: 'idea-to-deployable-mern-product',
+      title: 'From Idea to Deployable MERN Product',
+      excerpt:
+        'The checklist I use to move from rough feature ideas to reliable APIs, polished flows, and a clean launch.',
+      date: 'May 10, 2026',
+      readTime: '5 min read',
+      image: '/assets/grid2.png',
+      tags: ['mern', 'workflow'],
+      href: '/blog/idea-to-deployable-mern-product',
+      content: [
+        {
+          type: 'heading',
+          heading: 'Start With the Flow',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'Before building the stack, define the core user journey, the data shape, and the smallest reliable release that proves the product idea.',
+        },
+        {
+          type: 'code',
+          language: 'js',
+          code: `const releasePlan = [
+  'define the core user flow',
+  'shape the API contract',
+  'ship the smallest reliable version',
+];`,
+        },
+        {
+          type: 'heading',
+          heading: 'Ship the Boring Parts Well',
+        },
+        {
+          type: 'paragraph',
+          body:
+            'Authentication, validation, loading states, and clear API errors are the details that make a MERN app feel dependable.',
+        },
+        {
+          type: 'callout',
+          body: 'A polished product is often a collection of small, dependable decisions repeated across every screen.',
+        },
+      ],
     },
   ];
   
@@ -248,8 +468,8 @@ export const navLinks = [
   
   export const calculateSizes = (isSmall, isMobile, isTablet) => {
     return {
-      deskScale: isSmall ? 0.05 : isMobile ? 0.06 : 0.065,
-      deskPosition: isMobile ? [0.5, -4.5, 0] : [0.25, -5.5, 0],
+      deskScale: isSmall ? 0.068 : isMobile ? 0.078 : isTablet ? 0.082 : 0.09,
+      deskPosition: isSmall ? [0.2, -4.2, 0] : isMobile ? [0.35, -4.3, 0] : [0.1, -4.9, 0],
       cubePosition: isSmall ? [4, -5, 0] : isMobile ? [5, -5, 0] : isTablet ? [5, -5, 0] : [9, -5.5, 0],
       reactLogoPosition: isSmall ? [3, 4, 0] : isMobile ? [5, 4, 0] : isTablet ? [5, 4, 0] : [12, 3, 0],
       ringPosition: isSmall ? [-5, 7, 0] : isMobile ? [-10, 10, 0] : isTablet ? [-12, 10, 0] : [-24, 10, 0],
