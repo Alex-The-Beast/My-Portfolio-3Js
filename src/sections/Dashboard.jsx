@@ -1,3 +1,5 @@
+import { ArrowRight } from 'lucide-react';
+
 const contributionRows = [
   [1, 3, 2, 0, 4, 2, 1, 3, 5, 2, 0, 4, 3, 2, 5, 1, 4, 2, 3, 5, 4, 2, 1, 3],
   [3, 2, 0, 4, 2, 1, 5, 3, 0, 4, 2, 3, 5, 4, 1, 3, 2, 5, 4, 2, 3, 1, 4, 5],
@@ -100,7 +102,7 @@ const Dashboard = () => {
 
         <a href="#projects" className="dashboard-card discover-card group lg:col-span-2">
           <span>Discover more projects</span>
-          <span className="text-3xl transition-transform duration-300 group-hover:translate-x-1">-&gt;</span>
+          <ArrowRight className="h-7 w-7 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
         </a>
 
         <article className="dashboard-card github-card lg:col-span-3">

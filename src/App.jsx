@@ -9,7 +9,7 @@ import Blog from './sections/Blog'
 import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 import BlogArticle from './sections/BlogArticle'
-import LatestUpdates from './sections/LatestUpdates'
+import LatestUpdates, { UpdateDetail } from './sections/LatestUpdates'
 
 const ScrollToHash = () => {
   const { hash, pathname } = useLocation()
@@ -49,6 +49,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/work" element={<Project isPage />} />
         <Route path="/updates" element={<LatestUpdates isPage />} />
+        <Route path="/updates/:updateId" element={<UpdateDetail />} />
         <Route path="/blog" element={<Blog isPage />} />
         <Route path="/blog/:slug" element={<BlogArticle />} />
         <Route path="/contact" element={<Contact />} />
