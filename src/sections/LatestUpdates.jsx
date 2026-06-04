@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -210,6 +210,9 @@ const LatestUpdates = ({ isPage = false }) => {
   const [activeCategory, setActiveCategory] = useState('All Posts')
   const [searchTerm, setSearchTerm] = useState('')
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false)
+  const [visibleCount, setVisibleCount] = useState(9)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const loadMoreTimer = useRef(null)
 
   const categories = useMemo(
     () => ['All Posts', ...Array.from(new Set(learningUpdates.map((update) => update.category).filter(Boolean)))],
@@ -230,6 +233,18 @@ const LatestUpdates = ({ isPage = false }) => {
     })
   }, [activeCategory, searchTerm])
 
+  useEffect(() => {
+    if (loadMoreTimer.current) window.clearTimeout(loadMoreTimer.current)
+    setIsLoadingMore(false)
+    setVisibleCount(9)
+  }, [activeCategory, searchTerm])
+
+  useEffect(() => {
+    return () => {
+      if (loadMoreTimer.current) window.clearTimeout(loadMoreTimer.current)
+    }
+  }, [])
+
   if (!learningUpdates.length) {
     return (
       <section id="updates" className={`c-space bg-black ${isPage ? 'min-h-screen pt-36 pb-20' : 'my-24 scroll-mt-24 py-14'}`}>
@@ -240,11 +255,20 @@ const LatestUpdates = ({ isPage = false }) => {
     )
   }
 
-  const visibleUpdates = isPage ? filteredUpdates : filteredUpdates.slice(0, 3)
+  const visibleUpdates = isPage ? filteredUpdates.slice(0, visibleCount) : filteredUpdates.slice(0, 3)
+  const hasMoreUpdates = isPage && visibleCount < filteredUpdates.length
 
   const handleMobileCategorySelect = (category) => {
     setActiveCategory(category)
     setIsMobileCategoryOpen(false)
+  }
+
+  const handleShowMore = () => {
+    setIsLoadingMore(true)
+    loadMoreTimer.current = window.setTimeout(() => {
+      setVisibleCount((current) => current + 9)
+      setIsLoadingMore(false)
+    }, 420)
   }
 
   return (
@@ -368,6 +392,19 @@ const LatestUpdates = ({ isPage = false }) => {
             {visibleUpdates.map((update) => (
               <UpdateCard key={update.id} update={update} />
             ))}
+            {hasMoreUpdates && (
+              <div className="updates-show-more-cell">
+                <button
+                  type="button"
+                  className="updates-show-more"
+                  onClick={handleShowMore}
+                  disabled={isLoadingMore}
+                >
+                  {isLoadingMore && <span className="updates-loading-dot" aria-hidden="true" />}
+                  {isLoadingMore ? 'Loading posts...' : 'Show more posts'}
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="border border-zinc-800 px-8 py-16 text-center">
