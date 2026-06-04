@@ -2,8 +2,9 @@
 export const learningUpdates = [
   {
     "id": "375cf60d-add5-8003-8b37-c30fcb475bcb",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Merge Sort",
+    "slug": "merge-sort",
     "category": "DSA",
     "status": "Updated",
     "summary": "Given an array arr[], its starting position l and its ending position r. Sort the array using the merge sort algorithm.",
@@ -49,8 +50,9 @@ export const learningUpdates = [
   },
   {
     "id": "375cf60d-add5-80cd-aa65-e22f2b67e1a6",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Transformer",
+    "slug": "transformer",
     "category": "AI/ML",
     "status": "Updated",
     "summary": "",
@@ -61,8 +63,9 @@ export const learningUpdates = [
   },
   {
     "id": "375cf60d-add5-80cf-be3a-c76e6af18428",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Count Inversion",
+    "slug": "count-inversion",
     "category": "DSA",
     "status": "Updated",
     "summary": "Given an array of integers arr[]. You have to find the Inversion Count of the array. Inversion count is the number of pairs of elements (i, j) such that i < j and arr[i] > arr[j].",
@@ -124,8 +127,9 @@ export const learningUpdates = [
   },
   {
     "id": "375cf60d-add5-8026-b2dc-c8a38ac02e41",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Missing & Repeating Number In Array",
+    "slug": "missing-and-repeating-number",
     "category": "DSA",
     "status": "Updated",
     "summary": "Given an unsorted array arr[] of size n, containing elements from the range 1 to n, it is known that one number in this range is missing, and another number occurs twice in the array, find both the duplicate number and the missing number.",
@@ -228,8 +232,9 @@ export const learningUpdates = [
   },
   {
     "id": "374cf60d-add5-8014-8d34-fe751e226c6a",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Merge Sorted Array Without Taking Extra Space",
+    "slug": "merge-sorted-array",
     "category": "DSA",
     "status": "Updated",
     "summary": "Given two sorted arrays a[] and b[] of size n and m respectively, the task is to merge them in sorted order without using any extra space. Modify a[] so that it contains the first n elements and modify b[] so that it contains the last m elements.",
@@ -283,8 +288,9 @@ export const learningUpdates = [
   },
   {
     "id": "374cf60d-add5-8044-add1-f65ca013c5e7",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "4 sum",
+    "slug": "4sum",
     "category": "DSA",
     "status": "Updated",
     "summary": "",
@@ -301,8 +307,9 @@ export const learningUpdates = [
   },
   {
     "id": "8cd79b3f-6c6e-4b23-9789-87f0c9bbac4c",
-    "date": "June 04, 2026",
+    "date": "June 05, 2026",
     "title": "Understanding Redis Cache",
+    "slug": "understanding-redis-cache",
     "category": "System Design",
     "status": "Updated",
     "summary": "Redis is an in-memory database often used as a cache to speed up applications by storing frequently accessed data in RAM.",

@@ -30,7 +30,7 @@ const categoryStyles = {
 const getCategoryStyle = (category) =>
   categoryStyles[category] || 'border-zinc-500/40 bg-zinc-500/10 text-zinc-200'
 
-const getUpdatePath = (update) => `/updates/${update.id}`
+const getUpdatePath = (update) => `/updates/${update.slug || update.id}`
 
 const categoryIcons = {
   Learning: BookOpen,
@@ -227,19 +227,43 @@ const LatestUpdates = ({ isPage = false }) => {
   }
 
   return (
-    <section id="updates" className={`c-space bg-black ${isPage ? 'updates-page min-h-screen pt-36 pb-24' : 'my-24 scroll-mt-24 py-14'}`}>
+    <section
+      id="updates"
+      className={`c-space bg-black ${isPage ? "updates-page min-h-screen pt-36 pb-24" : "my-24 scroll-mt-24 py-14"}`}
+    >
       <div className="mx-auto max-w-7xl">
-        <div className="updates-heading mb-12 max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">Latest Updates</p>
-          <h2 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            Learning Journal 
-          </h2>
-          <p className="mt-5 text-base leading-8 text-zinc-400">
-            Synced from Notion and organized into readable notes for DSA, cloud, AI, ML, and engineering concepts.
-          </p>
+        <div className="updates-heading mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">
+              Latest Updates
+            </p>
+
+            <h2 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+              Learning Journal
+            </h2>
+            <p className="mt-5 text-base leading-8 text-zinc-400">
+              Synced from Notion and organized into readable notes for DSA, cloud,
+              AI, ML, and engineering concepts.
+            </p>
+          </div>
+
+          {!isPage && learningUpdates.length > 3 && (
+            <div className="flex shrink-0 justify-start lg:justify-end">
+              <Link
+                to="/updates"
+                className="group inline-flex items-center gap-2 rounded-full border border-zinc-800 px-5 py-3 text-sm font-semibold text-zinc-200 transition hover:border-zinc-600 hover:text-white"
+              >
+                View all notes
+                <ArrowRight
+                  className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
+              </Link>
+            </div>
+          )}
         </div>
 
-        <div className="updates-toolbar mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="updates-toolbar mb-8 flex flex-row gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="updates-mobile-select">
             <button
               type="button"
@@ -253,7 +277,12 @@ const LatestUpdates = ({ isPage = false }) => {
           </div>
 
           {isMobileCategoryOpen && (
-            <div className="updates-mobile-drawer" role="dialog" aria-modal="true" aria-label="Filter updates">
+            <div
+              className="updates-mobile-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Filter updates"
+            >
               <button
                 type="button"
                 className="updates-mobile-drawer-backdrop"
@@ -265,47 +294,52 @@ const LatestUpdates = ({ isPage = false }) => {
                   <button
                     key={category}
                     type="button"
-                    className={activeCategory === category ? 'is-active' : ''}
+                    className={activeCategory === category ? "is-active" : ""}
                     onClick={() => handleMobileCategorySelect(category)}
                   >
                     {category}
                   </button>
-              ))}
+                ))}
               </div>
             </div>
           )}
 
-          <div className="updates-category-pills flex gap-3 overflow-x-auto pb-2">
-            {categories.map((category) => {
-              const isActive = activeCategory === category
+          {isPage && (
+            <div className="updates-category-pills flex gap-3 overflow-x-auto pb-2">
+              {categories.map((category) => {
+                const isActive = activeCategory === category;
 
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setActiveCategory(category)}
-                  className={`shrink-0 rounded-full px-5 py-3 text-sm font-medium transition ${
-                    isActive ? 'bg-white text-black' : 'text-zinc-200 hover:bg-zinc-900 hover:text-white'
-                  }`}
-                >
-                  {category}
-                </button>
-              )
-            })}
-          </div>
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setActiveCategory(category)}
+                    className={`shrink-0 rounded-full px-5 py-3 text-sm font-medium transition ${
+                      isActive
+                        ? "bg-white text-black"
+                        : "text-zinc-200 hover:bg-zinc-900 hover:text-white"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-          <div className="updates-actions flex items-center gap-3">
-            <label className="updates-search flex h-11 min-w-0 items-center gap-3 rounded-full border border-zinc-800 bg-black px-4 text-zinc-500 transition focus-within:border-zinc-600 sm:w-72">
-              <Search className="h-4 w-4" aria-hidden="true" />
-              <input
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search notes"
-                className="min-w-0 flex-1 bg-transparent text-sm text-zinc-200 caret-white outline-none placeholder:text-zinc-500"
-              />
-            </label>
-       
-          </div>
+          {isPage && (
+            <div className="updates-actions flex items-center gap-3">
+              <label className="updates-search flex h-11 min-w-0 items-center gap-3 rounded-full border border-zinc-800 bg-black px-4 text-zinc-500 transition focus-within:border-zinc-600 sm:w-72">
+                <Search className="h-4 w-4" aria-hidden="true" />
+                <input
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder="Search notes"
+                  className="min-w-0 flex-1 bg-transparent text-sm text-zinc-200 caret-white outline-none placeholder:text-zinc-500"
+                />
+              </label>
+            </div>
+          )}
         </div>
 
         {visibleUpdates.length > 0 ? (
@@ -317,28 +351,20 @@ const LatestUpdates = ({ isPage = false }) => {
         ) : (
           <div className="border border-zinc-800 px-8 py-16 text-center">
             <p className="text-lg font-semibold text-white">No notes found</p>
-            <p className="mt-2 text-zinc-500">Try another category or search term.</p>
-          </div>
-        )}
-
-        {!isPage && learningUpdates.length > 3 && (
-          <div className="mt-8 flex justify-center">
-            <Link to="/updates" className="group inline-flex items-center gap-2 rounded-full border border-zinc-800 px-5 py-3 text-sm font-semibold text-zinc-200 transition hover:border-zinc-600 hover:text-white">
-              View all notes
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
+            <p className="mt-2 text-zinc-500">
+              Try another category or search term.
+            </p>
           </div>
         )}
       </div>
     </section>
-  )
+  );
 }
 
 export const UpdateDetail = () => {
   const { updateId } = useParams()
   const [copied, setCopied] = useState(false)
-  const update = learningUpdates.find((item) => item.id === updateId)
-  const summary = update ? getUpdateSummary(update) : ''
+  const update = learningUpdates.find((item) => item.slug === updateId || item.id === updateId)
 
   const handleCopyUrl = async () => {
     const url = window.location.href
@@ -424,18 +450,18 @@ export const UpdateDetail = () => {
         </header>
 
         <div className="update-detail-content">
-          {summary && <p className="update-detail-lead">{summary}</p>}
+          {/* {summary && <p className="update-detail-lead">{summary}</p>} */}
 
-          {update.notes?.length > 0 && (
+          {/* {update.notes?.length > 0 && (
             <ul className="update-notes">
               {update.notes.map((note) => (
                 <li key={note}>{note}</li>
               ))}
             </ul>
-          )}
+          )} */}
 
           {update.blocks?.length > 0 && (
-            <div className="update-detail">
+            <div className="update-detail ">
             {update.blocks.map((block, index) => {
               if (block.type !== 'note') return renderUpdateBlock(block, index)
 

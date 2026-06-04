@@ -605,7 +605,7 @@ textarea,
   top: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(63, 63, 70, 0.72);
+  background: rgba(63, 63, 70, 0.34);
   pointer-events: none;
 }
 
@@ -1044,7 +1044,7 @@ textarea,
 
   .updates-page .updates-toolbar {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1.35rem;
@@ -1123,25 +1123,31 @@ textarea,
   }
 
   .updates-mobile-drawer-panel button.is-active,
+  .updates-mobile-drawer-panel button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
 
 
   .updates-page .updates-actions {
-    justify-content: flex-end;
+    justify-content: stretch;
+    min-width: 0;
   }
 
   .updates-page .updates-search {
-    width: 2.55rem;
-    height: 2.55rem;
-    padding: 0;
-    justify-content: center;
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 0.95rem;
+    justify-content: flex-start;
+    border-radius: 9999px;
   }
 
   .updates-page .updates-search input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
+    position: static;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .updates-page .updates-actions button {
@@ -1209,6 +1215,71 @@ textarea,
 
   .updates-page .update-card-footer > svg {
     display: none;
+  }
+
+  .update-detail-page {
+    min-height: auto;
+    padding: 1rem 1rem 3rem;
+  }
+
+  .update-detail-page::before {
+    left: 50%;
+  }
+
+  .update-detail-page::after {
+    display: none;
+  }
+
+  .update-detail-header {
+    padding-bottom: 2.25rem;
+  }
+
+  .update-detail-header h1 {
+    max-width: 22rem;
+    font-size: clamp(2.1rem, 9.5vw, 3rem);
+    line-height: 1.05;
+  }
+
+  .update-detail-header > p {
+    margin-top: 2.75rem;
+    font-size: 0.78rem;
+  }
+
+  .update-detail-header .mt-24 {
+    margin-top: 2.9rem;
+    gap: 1rem;
+    font-size: 0.78rem;
+  }
+
+  .update-detail-content {
+    max-width: 100%;
+  }
+
+  .update-detail-lead {
+    font-size: 1rem;
+    line-height: 1.58;
+  }
+
+  .update-detail {
+    gap: 1rem;
+    margin-top: 1.65rem;
+  }
+
+  .update-detail-heading {
+    font-size: 1.28rem;
+    line-height: 1.28;
+  }
+
+  .update-detail-text {
+    font-size: 0.95rem;
+    line-height: 1.62;
+  }
+
+  .update-notes li,
+  .update-quote,
+  .update-callout {
+    font-size: 0.92rem;
+    line-height: 1.62;
   }
 
 }
