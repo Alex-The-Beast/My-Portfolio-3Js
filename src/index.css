@@ -404,6 +404,10 @@ textarea,
   border-bottom: 1px solid rgba(39, 39, 42, 0.95);
 }
 
+.updates-mobile-select {
+  display: none;
+}
+
 .update-spotlight-card::before {
   content: '';
   position: absolute;
@@ -1029,6 +1033,184 @@ textarea,
     padding: 1rem;
   }
 
+  .updates-page {
+    padding-top: 1.35rem;
+    padding-bottom: 4rem;
+  }
+
+  .updates-page .updates-heading {
+    display: none;
+  }
+
+  .updates-page .updates-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .updates-page .updates-category-pills {
+    display: none;
+  }
+
+  .updates-page .updates-mobile-select {
+    position: relative;
+    display: inline-flex;
+    width: fit-content;
+  }
+
+  .updates-page .updates-mobile-select-button {
+    position: relative;
+    min-height: 2.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 9999px;
+    background: #f4f4f5;
+    padding: 0 2.2rem 0 0.95rem;
+    color: #050505;
+    font-size: 0.88rem;
+    font-weight: 420;
+    line-height: 1;
+  }
+
+  .updates-page .updates-mobile-select-button::after {
+    content: '';
+    position: absolute;
+    right: 0.92rem;
+    top: 50%;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 1.5px solid #111;
+    border-bottom: 1.5px solid #111;
+    pointer-events: none;
+    transform: translateY(-65%) rotate(45deg);
+  }
+
+  .updates-mobile-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .updates-mobile-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.38);
+  }
+
+  .updates-mobile-drawer-panel {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 100%;
+    max-height: min(82vh, 38rem);
+    overflow-y: auto;
+    background: #060606;
+    box-shadow: 0 -1.25rem 3rem rgba(0, 0, 0, 0.42);
+    animation: updates-drawer-rise 0.24s ease-out both;
+  }
+
+  .updates-mobile-drawer-panel button {
+    min-height: 3.40rem;
+    padding: 0 1rem;
+    color: #d4d4d8;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: left;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+
+  .updates-mobile-drawer-panel button.is-active,
+
+
+  .updates-page .updates-actions {
+    justify-content: flex-end;
+  }
+
+  .updates-page .updates-search {
+    width: 2.55rem;
+    height: 2.55rem;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .updates-page .updates-search input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .updates-page .updates-actions button {
+    width: 2.55rem;
+    height: 2.55rem;
+  }
+
+  .updates-page .updates-actions svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .updates-page .updates-vercel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .updates-page .update-spotlight-card {
+    min-height: 16.75rem;
+    padding: 1.55rem 1.45rem 1.45rem;
+  }
+
+  .updates-page .update-card-top svg {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+
+  .updates-page .update-card-top span {
+    font-size: 0.78rem;
+  }
+
+  .updates-page .update-card-body {
+    margin-top: 2.65rem;
+  }
+
+  .updates-page .update-card-body > div {
+    display: none;
+  }
+
+  .updates-page .update-card-body h3 {
+    margin-top: 0;
+    max-width: 18rem;
+    font-size: 1.28rem;
+    line-height: 1.18;
+  }
+
+  .updates-page .update-card-body p {
+    margin-top: 0.75rem;
+    display: -webkit-box;
+    max-width: 20rem;
+    overflow: hidden;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .updates-page .update-card-footer {
+    inset-inline: 1.45rem;
+    bottom: 1.45rem;
+  }
+
+  .updates-page .update-card-footer > span {
+    font-size: 0.78rem;
+  }
+
+  .updates-page .update-card-footer > svg {
+    display: none;
+  }
+
 }
 
 @media (min-width: 768px) {
@@ -1118,6 +1300,16 @@ textarea,
 
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes updates-drawer-rise {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
     transform: translateY(0);
   }
 }

@@ -11,7 +11,6 @@ import {
   Database,
   ExternalLink,
   Link as LinkIcon,
-  Rss,
   Search,
   ShieldCheck,
   Timer,
@@ -154,12 +153,12 @@ const UpdateCard = ({ update }) => {
       className="update-spotlight-card group relative min-h-[31rem] overflow-hidden border border-zinc-800 bg-black p-10 transition duration-300 hover:border-zinc-600 sm:min-h-[34rem]"
       onPointerMove={handlePointerMove}
     >
-      <div className="relative z-10 flex items-start justify-between gap-5">
+      <div className="update-card-top relative z-10 flex items-start justify-between gap-5">
         <Icon className="h-12 w-12 text-zinc-100 md:h-14 md:w-14" strokeWidth={1.5} aria-hidden="true" />
         <span className="text-sm font-medium text-zinc-400">{update.date}</span>
       </div>
 
-      <div className="relative z-10 mt-20">
+      <div className="update-card-body relative z-10 mt-20">
         <div className="flex flex-wrap items-center gap-2">
           <span className={`update-chip ${getCategoryStyle(update.category)}`}>{update.category}</span>
           <span className="rounded border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-xs font-semibold text-zinc-500">
@@ -175,10 +174,10 @@ const UpdateCard = ({ update }) => {
         </p>
       </div>
 
-      <div className="absolute inset-x-10 bottom-10 z-10 flex items-center justify-between gap-4">
+      <div className="update-card-footer absolute inset-x-10 bottom-10 z-10 flex items-center justify-between gap-4">
         <span className="inline-flex min-w-0 items-center gap-2 text-sm font-medium text-zinc-300">
-          <span className="h-6 w-6 overflow-hidden rounded-full border border-zinc-700 bg-zinc-900" />
-          <span className="truncate">Gaurav</span>
+          {/* <span className="h-6 w-6 overflow-hidden rounded-full border border-zinc-700 bg-zinc-900" />
+          <span className="truncate">Gaurav</span> */}
         </span>
         <ArrowRight className="h-4 w-4 text-zinc-500 transition group-hover:translate-x-1 group-hover:text-white" aria-hidden="true" />
       </div>
@@ -189,6 +188,7 @@ const UpdateCard = ({ update }) => {
 const LatestUpdates = ({ isPage = false }) => {
   const [activeCategory, setActiveCategory] = useState('All Posts')
   const [searchTerm, setSearchTerm] = useState('')
+  const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false)
 
   const categories = useMemo(
     () => ['All Posts', ...Array.from(new Set(learningUpdates.map((update) => update.category).filter(Boolean)))],
@@ -221,10 +221,15 @@ const LatestUpdates = ({ isPage = false }) => {
 
   const visibleUpdates = isPage ? filteredUpdates : filteredUpdates.slice(0, 3)
 
+  const handleMobileCategorySelect = (category) => {
+    setActiveCategory(category)
+    setIsMobileCategoryOpen(false)
+  }
+
   return (
-    <section id="updates" className={`c-space bg-black ${isPage ? 'min-h-screen pt-36 pb-24' : 'my-24 scroll-mt-24 py-14'}`}>
+    <section id="updates" className={`c-space bg-black ${isPage ? 'updates-page min-h-screen pt-36 pb-24' : 'my-24 scroll-mt-24 py-14'}`}>
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 max-w-3xl">
+        <div className="updates-heading mb-12 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">Latest Updates</p>
           <h2 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
             Learning Journal 
@@ -234,8 +239,43 @@ const LatestUpdates = ({ isPage = false }) => {
           </p>
         </div>
 
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="updates-toolbar mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="updates-mobile-select">
+            <button
+              type="button"
+              className="updates-mobile-select-button"
+              onClick={() => setIsMobileCategoryOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={isMobileCategoryOpen}
+            >
+              {activeCategory}
+            </button>
+          </div>
+
+          {isMobileCategoryOpen && (
+            <div className="updates-mobile-drawer" role="dialog" aria-modal="true" aria-label="Filter updates">
+              <button
+                type="button"
+                className="updates-mobile-drawer-backdrop"
+                onClick={() => setIsMobileCategoryOpen(false)}
+                aria-label="Close filter menu"
+              />
+              <div className="updates-mobile-drawer-panel">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    className={activeCategory === category ? 'is-active' : ''}
+                    onClick={() => handleMobileCategorySelect(category)}
+                  >
+                    {category}
+                  </button>
+              ))}
+              </div>
+            </div>
+          )}
+
+          <div className="updates-category-pills flex gap-3 overflow-x-auto pb-2">
             {categories.map((category) => {
               const isActive = activeCategory === category
 
@@ -254,8 +294,8 @@ const LatestUpdates = ({ isPage = false }) => {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
-            <label className="flex h-11 min-w-0 items-center gap-3 rounded-full border border-zinc-800 bg-black px-4 text-zinc-500 transition focus-within:border-zinc-600 sm:w-72">
+          <div className="updates-actions flex items-center gap-3">
+            <label className="updates-search flex h-11 min-w-0 items-center gap-3 rounded-full border border-zinc-800 bg-black px-4 text-zinc-500 transition focus-within:border-zinc-600 sm:w-72">
               <Search className="h-4 w-4" aria-hidden="true" />
               <input
                 value={searchTerm}
@@ -264,13 +304,7 @@ const LatestUpdates = ({ isPage = false }) => {
                 className="min-w-0 flex-1 bg-transparent text-sm text-zinc-200 caret-white outline-none placeholder:text-zinc-500"
               />
             </label>
-            <button
-              type="button"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-zinc-800 text-zinc-300 transition hover:border-zinc-600 hover:text-white"
-              aria-label="RSS feed"
-            >
-              <Rss className="h-5 w-5" aria-hidden="true" />
-            </button>
+       
           </div>
         </div>
 
@@ -347,7 +381,7 @@ export const UpdateDetail = () => {
           </p>
           <h1>{update.title}</h1>
 
-          <div className="mt-9 flex flex-col items-center gap-3 text-sm sm:text-base">
+          {/* <div className="mt-9 flex flex-col items-center gap-3 text-sm sm:text-base">
             <div className="flex items-center gap-3">
               <span className="flex h-7 w-7 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 text-xs font-semibold text-zinc-300">
                 G
@@ -362,7 +396,7 @@ export const UpdateDetail = () => {
               <span className="font-semibold text-white">Notion</span>
               <span className="text-zinc-400">Synced source</span>
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-24 grid gap-5 text-sm text-zinc-400 md:grid-cols-[1fr_auto] md:items-center">
             <div className="flex flex-wrap items-center gap-5">
