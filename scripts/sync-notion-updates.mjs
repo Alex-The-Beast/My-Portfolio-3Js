@@ -59,9 +59,11 @@ const loadPropertyNames = () => {
     slug: process.env.NOTION_SLUG_PROPERTY || 'Slug',
     category: process.env.NOTION_CATEGORY_PROPERTY || 'Category',
     status: process.env.NOTION_STATUS_PROPERTY || 'Status',
-    date: process.env.NOTION_DATE_PROPERTY || 'Date',
+    date: process.env.NOTION_DATE_PROPERTY || 'Created Date',
+    updatedAt: process.env.NOTION_UPDATED_AT_PROPERTY || 'updated',
     summary: process.env.NOTION_SUMMARY_PROPERTY || 'Summary',
     focus: process.env.NOTION_FOCUS_PROPERTY || 'Focus',
+    tags: process.env.NOTION_TAGS_PROPERTY || 'Tags',
     published: process.env.NOTION_PUBLISHED_PROPERTY || 'Published',
   }
 }
@@ -103,18 +105,28 @@ const getSelectName = (property) => property?.select?.name || property?.status?.
 
 const getMultiSelect = (property) => property?.multi_select?.map((item) => item.name) || []
 
-const getDate = (properties) => {
-  const dateProperty = properties[propertyNames.date]?.date?.start
-  const rawDate = dateProperty || properties[propertyNames.date]?.created_time
-
+const formatDate = (rawDate) => {
   if (!rawDate) return new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })
 
   return new Date(rawDate).toLocaleDateString('en-US', {
     month: 'long',
     day: '2-digit',
     year: 'numeric',
+    timeZone: process.env.NOTION_DATE_TIME_ZONE || 'Asia/Kolkata',
   })
 }
+
+const getPropertyDate = (properties, name) => {
+  const property = properties[name]
+
+  return property?.date?.start || property?.created_time || property?.last_edited_time || ''
+}
+
+const getPublishedAt = (properties, page) =>
+  formatDate(getPropertyDate(properties, propertyNames.date) || page.created_time)
+
+const getUpdatedAt = (properties, page) =>
+  formatDate(getPropertyDate(properties, propertyNames.updatedAt) || page.last_edited_time)
 
 const getBlockText = (block) => {
   const value = block[block.type]
@@ -149,9 +161,11 @@ const normalizeBlock = (block) => {
     case 'paragraph':
       return text ? { type: 'paragraph', text } : null
     case 'bulleted_list_item':
+      return text ? { type: 'bullet', text } : null
     case 'numbered_list_item':
+      return text ? { type: 'numbered', text } : null
     case 'to_do':
-      return text ? { type: 'note', text } : null
+      return text ? { type: 'todo', text, checked: Boolean(block.to_do?.checked) } : null
     case 'code':
       return {
         type: 'code',
@@ -299,13 +313,17 @@ const pageToUpdate = async (page) => {
   const blocks = await getPageBlocks(page.id)
   const properties = page.properties || {}
   const title = getTitle(properties)
-  const blockNotes = blocks.filter((block) => block.type === 'note').map((block) => block.text)
+  const blockNotes = blocks
+    .filter((block) => ['bullet', 'numbered', 'todo', 'note'].includes(block.type))
+    .map((block) => block.text)
   const paragraphFallback = blocks.filter((block) => block.type === 'paragraph').map((block) => block.text)
   const summary = getRichText(properties, propertyNames.summary) || paragraphFallback[0] || ''
 
   return {
     id: page.id,
-    date: getDate(properties),
+    date: getPublishedAt(properties, page),
+    publishedAt: getPublishedAt(properties, page),
+    updatedAt: getUpdatedAt(properties, page),
     title,
     slug: getSlug(properties, title, page.id),
     category: getSelectName(properties[propertyNames.category]) || "Learning",
@@ -313,6 +331,7 @@ const pageToUpdate = async (page) => {
     summary,
     notes: blockNotes.length ? blockNotes : paragraphFallback.slice(1, 4),
     focus: getMultiSelect(properties[propertyNames.focus]),
+    tags: getMultiSelect(properties[propertyNames.tags]),
     blocks,
     sourceUrl: page.url,
   };

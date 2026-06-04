@@ -447,6 +447,19 @@ textarea,
   font-weight: 760;
 }
 
+.update-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 0.24rem 0.65rem;
+  color: #d4d4d8;
+  font-size: 0.72rem;
+  font-weight: 620;
+}
+
 .update-notes {
   display: grid;
   gap: 0.9rem;
@@ -481,6 +494,23 @@ textarea,
   color: #f4f4f5;
   font-size: clamp(1.08rem, 1.55vw, 1.35rem);
   line-height: 1.62;
+}
+
+.update-detail-bullets {
+  margin: 0.25rem 0;
+  padding-left: 1.35rem;
+  color: #e4e4e7;
+  font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+  line-height: 1.7;
+  list-style: disc;
+}
+
+.update-detail-numbered {
+  list-style: decimal;
+}
+
+.update-detail-bullets li::marker {
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .update-code {
@@ -1272,6 +1302,11 @@ textarea,
 
   .update-detail-text {
     font-size: 0.95rem;
+    line-height: 1.62;
+  }
+
+  .update-detail-bullets {
+    font-size: 0.94rem;
     line-height: 1.62;
   }
 

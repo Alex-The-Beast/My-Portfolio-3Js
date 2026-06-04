@@ -61,6 +61,8 @@ const getReadTime = (update) => {
   return `${Math.max(1, Math.ceil(words / 180))} min read`
 }
 
+const getUpdateTags = (update) => [...(update.tags || []), ...(update.focus || [])].filter(Boolean)
+
 const renderUpdateBlock = (block, index) => {
   const key = `${block.type}-${index}-${block.text || block.url || ''}`
 
@@ -70,7 +72,24 @@ const renderUpdateBlock = (block, index) => {
     case 'paragraph':
       return <p key={key} className="update-detail-text">{block.text}</p>
     case 'note':
-      return <li key={key}>{block.text}</li>
+    case 'bullet':
+      return (
+        <ul key={key} className="update-detail-bullets">
+          <li>{block.text}</li>
+        </ul>
+      )
+    case 'numbered':
+      return (
+        <ol key={key} className="update-detail-bullets update-detail-numbered">
+          <li>{block.text}</li>
+        </ol>
+      )
+    case 'todo':
+      return (
+        <ul key={key} className="update-detail-bullets">
+          <li>{block.checked ? `Done: ${block.text}` : block.text}</li>
+        </ul>
+      )
     case 'code':
       return (
         <div key={key} className="update-code">
@@ -140,6 +159,7 @@ const renderUpdateBlock = (block, index) => {
 
 const UpdateCard = ({ update }) => {
   const Icon = getCategoryIcon(update.category)
+  const tags = getUpdateTags(update)
 
   const handlePointerMove = (event) => {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -155,15 +175,16 @@ const UpdateCard = ({ update }) => {
     >
       <div className="update-card-top relative z-10 flex items-start justify-between gap-5">
         <Icon className="h-12 w-12 text-zinc-100 md:h-14 md:w-14" strokeWidth={1.5} aria-hidden="true" />
-        <span className="text-sm font-medium text-zinc-400">{update.date}</span>
+        <span className="text-sm font-medium text-zinc-400">Updated at {update.updatedAt || update.date}</span>
       </div>
 
       <div className="update-card-body relative z-10 mt-20">
         <div className="flex flex-wrap items-center gap-2">
           <span className={`update-chip ${getCategoryStyle(update.category)}`}>{update.category}</span>
-          <span className="rounded border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-xs font-semibold text-zinc-500">
-            {update.status}
-          </span>
+    
+          {tags.slice(0, 2).map((tag) => (
+            <span key={tag} className="update-tag-chip">{tag}</span>
+          ))}
         </div>
 
         <h3 className="mt-7 max-w-sm text-3xl font-semibold leading-tight text-white transition group-hover:text-zinc-100">
@@ -200,7 +221,7 @@ const LatestUpdates = ({ isPage = false }) => {
 
     return learningUpdates.filter((update) => {
       const matchesCategory = activeCategory === 'All Posts' || update.category === activeCategory
-      const searchable = [update.title, update.summary, update.category, update.status, ...(update.notes || [])]
+      const searchable = [update.title, update.summary, update.category, update.status, ...(update.notes || []), ...getUpdateTags(update)]
         .filter(Boolean)
         .join(' ')
         .toLowerCase()
@@ -430,6 +451,10 @@ export const UpdateDetail = () => {
                 <Timer className="h-4 w-4" aria-hidden="true" />
                 {getReadTime(update)}
               </span>
+              <span>Published {update.publishedAt || update.date}</span>
+              {getUpdateTags(update).map((tag) => (
+                <span key={tag} className="update-tag-chip">{tag}</span>
+              ))}
               <button
                 type="button"
                 onClick={handleCopyUrl}
@@ -445,7 +470,7 @@ export const UpdateDetail = () => {
                 </a>
               )}
             </div>
-            <time className="text-zinc-300">{update.date}</time>
+            <time className="text-zinc-300">Updated at {update.updatedAt || update.date}</time>
           </div>
         </header>
 
@@ -463,9 +488,7 @@ export const UpdateDetail = () => {
           {update.blocks?.length > 0 && (
             <div className="update-detail ">
             {update.blocks.map((block, index) => {
-              if (block.type !== 'note') return renderUpdateBlock(block, index)
-
-              return null
+              return renderUpdateBlock(block, index)
             })}
             </div>
           )}
