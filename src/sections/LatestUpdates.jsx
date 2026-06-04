@@ -227,7 +227,7 @@ const LatestUpdates = ({ isPage = false }) => {
         <div className="mb-12 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-zinc-500">Latest Updates</p>
           <h2 className="mt-5 text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            Daily learning notes I can revise from later.
+            Learning Journal 
           </h2>
           <p className="mt-5 text-base leading-8 text-zinc-400">
             Synced from Notion and organized into readable notes for DSA, cloud, AI, ML, and engineering concepts.
