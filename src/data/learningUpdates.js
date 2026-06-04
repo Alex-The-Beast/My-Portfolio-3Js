@@ -25,7 +25,7 @@ export const learningUpdates = [
       },
       {
         "type": "heading",
-        "text": "Intitution"
+        "text": "Intution"
       },
       {
         "type": "paragraph",
