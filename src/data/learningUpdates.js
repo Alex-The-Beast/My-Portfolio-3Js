@@ -4,7 +4,7 @@ export const learningUpdates = [
     "id": "374cf60d-add5-8014-8d34-fe751e226c6a",
     "date": "June 04, 2026",
     "title": "Merge Sorted Array Without Taking Extra Space",
-    "category": "Learning",
+    "category": "DSA",
     "status": "Updated",
     "summary": "Given two sorted arrays a[] and b[] of size n and m respectively, the task is to merge them in sorted order without using any extra space. Modify a[] so that it contains the first n elements and modify b[] so that it contains the last m elements.",
     "notes": [
@@ -59,7 +59,7 @@ export const learningUpdates = [
     "id": "374cf60d-add5-8044-add1-f65ca013c5e7",
     "date": "June 04, 2026",
     "title": "4 sum",
-    "category": "Learning",
+    "category": "DSA",
     "status": "Updated",
     "summary": "",
     "notes": [],
@@ -77,7 +77,7 @@ export const learningUpdates = [
     "id": "8cd79b3f-6c6e-4b23-9789-87f0c9bbac4c",
     "date": "June 04, 2026",
     "title": "Understanding Redis Cache",
-    "category": "Learning",
+    "category": "System Design",
     "status": "Updated",
     "summary": "Redis is an in-memory database often used as a cache to speed up applications by storing frequently accessed data in RAM.",
     "notes": [
