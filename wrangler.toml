@@ -4,11 +4,12 @@ compatibility_date = "2026-06-05"
 
 # Create a KV namespace in Cloudflare, then either bind it in the dashboard as
 # CONTENT_CACHE or uncomment this block and paste the namespace IDs.
-#
-# [[kv_namespaces]]
-# binding = "CONTENT_CACHE"
-# id = "<production_namespace_id>"
-#
+
+[[kv_namespaces]]
+binding = "CONTENT_CACHE"
+id = "a5b021396e7f43aba58797819ac504ab"
+
 # [[env.preview.kv_namespaces]]
 # binding = "CONTENT_CACHE"
 # id = "<preview_namespace_id>"
+
