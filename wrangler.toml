@@ -1,0 +1,14 @@
+name = "myportfolio"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-06-05"
+
+# Create a KV namespace in Cloudflare, then either bind it in the dashboard as
+# CONTENT_CACHE or uncomment this block and paste the namespace IDs.
+#
+# [[kv_namespaces]]
+# binding = "CONTENT_CACHE"
+# id = "<production_namespace_id>"
+#
+# [[env.preview.kv_namespaces]]
+# binding = "CONTENT_CACHE"
+# id = "<preview_namespace_id>"

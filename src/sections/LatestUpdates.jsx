@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { learningUpdates } from '../data/learningUpdates.js'
+import { useLearningUpdates } from '../hooks/useLearningUpdates.js'
 
 const categoryStyles = {
   Learning: 'border-violet-400/30 bg-violet-400/10 text-violet-200',
@@ -207,6 +207,7 @@ const UpdateCard = ({ update }) => {
 }
 
 const LatestUpdates = ({ isPage = false }) => {
+  const { updates: learningUpdates, isLoading, error, source, stale } = useLearningUpdates()
   const [activeCategory, setActiveCategory] = useState('All Posts')
   const [searchTerm, setSearchTerm] = useState('')
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false)
@@ -216,7 +217,7 @@ const LatestUpdates = ({ isPage = false }) => {
 
   const categories = useMemo(
     () => ['All Posts', ...Array.from(new Set(learningUpdates.map((update) => update.category).filter(Boolean)))],
-    [],
+    [learningUpdates],
   )
 
   const filteredUpdates = useMemo(() => {
@@ -231,7 +232,7 @@ const LatestUpdates = ({ isPage = false }) => {
 
       return matchesCategory && (!normalizedSearch || searchable.includes(normalizedSearch))
     })
-  }, [activeCategory, searchTerm])
+  }, [activeCategory, learningUpdates, searchTerm])
 
   useEffect(() => {
     if (loadMoreTimer.current) window.clearTimeout(loadMoreTimer.current)
@@ -307,6 +308,18 @@ const LatestUpdates = ({ isPage = false }) => {
             </div>
           )}
         </div>
+
+        {(isLoading || error || stale || source !== 'static') && (
+          <div className="mb-8 border border-zinc-800 bg-zinc-950/60 px-5 py-3 text-sm text-zinc-400">
+            {isLoading
+              ? 'Loading latest notes from the content API...'
+              : error
+                ? `Showing fallback notes. ${error}`
+                : stale
+                  ? 'Showing cached notes while Notion is unavailable.'
+                  : `Content served from ${source}.`}
+          </div>
+        )}
 
         <div className="updates-toolbar mb-8 flex flex-row gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="updates-mobile-select">
@@ -421,6 +434,7 @@ const LatestUpdates = ({ isPage = false }) => {
 
 export const UpdateDetail = () => {
   const { updateId } = useParams()
+  const { updates: learningUpdates, isLoading, error, stale } = useLearningUpdates()
   const [copied, setCopied] = useState(false)
   const update = learningUpdates.find((item) => item.slug === updateId || item.id === updateId)
 
@@ -434,6 +448,16 @@ export const UpdateDetail = () => {
     } catch {
       setCopied(false)
     }
+  }
+
+  if (!update && isLoading) {
+    return (
+      <section className="c-space min-h-screen bg-black pt-36 pb-20">
+        <div className="mx-auto max-w-4xl border border-zinc-800 bg-black p-8">
+          <p className="text-zinc-400">Loading update...</p>
+        </div>
+      </section>
+    )
   }
 
   if (!update) {
@@ -464,6 +488,16 @@ export const UpdateDetail = () => {
             Learning / <span className="text-zinc-200">{update.category}</span>
           </p>
           <h1>{update.title}</h1>
+
+          {(isLoading || error || stale) && (
+            <p className="mt-8 text-center text-sm text-zinc-500">
+              {isLoading
+                ? 'Refreshing from the content API...'
+                : error
+                  ? `Showing fallback content. ${error}`
+                  : 'Showing cached content while Notion is unavailable.'}
+            </p>
+          )}
 
           {/* <div className="mt-9 flex flex-col items-center gap-3 text-sm sm:text-base">
             <div className="flex items-center gap-3">
