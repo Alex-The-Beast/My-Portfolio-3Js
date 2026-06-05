@@ -408,6 +408,116 @@ textarea,
   display: none;
 }
 
+.updates-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(100%, 22rem);
+  min-height: 2.95rem;
+  border: 1px solid rgba(63, 63, 70, 0.9);
+  border-radius: 9999px;
+  background:
+    linear-gradient(180deg, rgba(18, 18, 20, 0.92), rgba(0, 0, 0, 0.96)),
+    #050505;
+  padding: 0 0.8rem 0 1rem;
+  color: #a1a1aa;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.055), 0 18px 55px rgba(0, 0, 0, 0.22);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.updates-search:focus-within {
+  border-color: rgba(212, 212, 216, 0.72);
+  background:
+    linear-gradient(180deg, rgba(24, 24, 27, 0.95), rgba(0, 0, 0, 0.98)),
+    #050505;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 0 0 4px rgba(255, 255, 255, 0.055);
+}
+
+.updates-search input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: #f4f4f5;
+  font-size: 0.92rem;
+  font-weight: 520;
+  outline: none;
+}
+
+.updates-search input::-webkit-search-decoration,
+.updates-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.updates-search input::placeholder {
+  color: #71717a;
+}
+
+.updates-search-clear {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  color: #a1a1aa;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.updates-search-clear:hover,
+.updates-search-clear:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+}
+
+.updates-search-clear svg,
+.updates-search-spinner {
+  width: 1rem;
+  height: 1rem;
+}
+
+.updates-search-spinner {
+  animation: updates-spin 0.75s linear infinite;
+}
+
+.updates-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  color: #d4d4d8;
+}
+
+.updates-loader span {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.35;
+  animation: updates-loader-pulse 1s ease-in-out infinite;
+}
+
+.updates-loader span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.updates-loader span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.updates-empty-loading {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  border-top: 1px solid rgba(39, 39, 42, 0.95);
+  border-left: 1px solid rgba(39, 39, 42, 0.95);
+  border-right: 1px solid rgba(39, 39, 42, 0.95);
+  border-bottom: 1px solid rgba(39, 39, 42, 0.95);
+  background: #000;
+}
+
 .updates-show-more {
   display: inline-flex;
   align-items: center;
@@ -503,6 +613,7 @@ textarea,
 .update-spotlight-card:hover::before {
   opacity: 1;
 }
+
 
 .update-chip {
   display: inline-flex;
@@ -1234,23 +1345,18 @@ textarea,
 
   .updates-page .updates-search {
     width: 100%;
-    height: 2.75rem;
-    padding: 0 0.95rem;
+    min-height: 2.75rem;
+    padding: 0 0.65rem 0 0.9rem;
     justify-content: flex-start;
-    border-radius: 9999px;
   }
 
   .updates-page .updates-search input {
-    position: static;
-    width: auto;
-    height: auto;
-    opacity: 1;
-    pointer-events: auto;
+    font-size: 0.86rem;
   }
 
-  .updates-page .updates-actions button {
-    width: 2.55rem;
-    height: 2.55rem;
+  .updates-page .updates-search-clear {
+    width: 1.85rem;
+    height: 1.85rem;
   }
 
   .updates-page .updates-actions svg {
@@ -1260,6 +1366,14 @@ textarea,
 
   .updates-page .updates-vercel-grid {
     grid-template-columns: 1fr;
+  }
+
+  .updates-page .updates-show-more-cell {
+    padding: 2rem 1rem;
+  }
+
+  .updates-page .updates-show-more {
+    width: 100%;
   }
 
   .updates-page .update-spotlight-card {
@@ -1491,5 +1605,37 @@ textarea,
 @keyframes updates-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes updates-loader-pulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.28;
+    transform: translateY(0) scale(0.86);
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(-0.18rem) scale(1);
+  }
+}
+
+@keyframes updates-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .update-spotlight-card.is-new {
+    animation: none;
   }
 }

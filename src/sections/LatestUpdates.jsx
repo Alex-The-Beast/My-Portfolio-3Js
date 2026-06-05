@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -11,10 +11,12 @@ import {
   Database,
   ExternalLink,
   Link as LinkIcon,
+  Loader2,
   Search,
   ShieldCheck,
   Timer,
   Triangle,
+  X,
 } from 'lucide-react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -62,6 +64,26 @@ const getReadTime = (update) => {
 }
 
 const getUpdateTags = (update) => [...(update.tags || []), ...(update.focus || [])].filter(Boolean)
+
+const useDebouncedValue = (value, delay = 280) => {
+  const [debouncedValue, setDebouncedValue] = useState(value)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedValue(value), delay)
+
+    return () => window.clearTimeout(timer)
+  }, [delay, value])
+
+  return debouncedValue
+}
+
+const UpdatesLoader = ({ className = '' }) => (
+  <div className={`updates-loader ${className}`} aria-label="Loading updates" role="status">
+    <span />
+    <span />
+    <span />
+  </div>
+)
 
 const renderUpdateBlock = (block, index) => {
   const key = `${block.type}-${index}-${block.text || block.url || ''}`
@@ -157,7 +179,7 @@ const renderUpdateBlock = (block, index) => {
   }
 }
 
-const UpdateCard = ({ update }) => {
+const UpdateCard = ({ update, cardRef, isNew = false, enterDelay = 0 }) => {
   const Icon = getCategoryIcon(update.category)
   const tags = getUpdateTags(update)
 
@@ -169,8 +191,10 @@ const UpdateCard = ({ update }) => {
 
   return (
     <Link
+      ref={cardRef}
       to={getUpdatePath(update)}
-      className="update-spotlight-card group relative min-h-[31rem] overflow-hidden border border-zinc-800 bg-black p-10 transition duration-300 hover:border-zinc-600 sm:min-h-[34rem]"
+      className={`update-spotlight-card group relative min-h-[31rem] overflow-hidden border border-zinc-800 bg-black p-10 transition duration-300 hover:border-zinc-600 sm:min-h-[34rem] ${isNew ? 'is-new' : ''}`}
+      style={isNew ? { animationDelay: `${enterDelay}ms` } : undefined}
       onPointerMove={handlePointerMove}
     >
       <div className="update-card-top relative z-10 flex items-start justify-between gap-5">
@@ -207,46 +231,68 @@ const UpdateCard = ({ update }) => {
 }
 
 const LatestUpdates = ({ isPage = false }) => {
-  const { updates: learningUpdates, isLoading, error, source, stale } = useLearningUpdates()
   const [activeCategory, setActiveCategory] = useState('All Posts')
   const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearchTerm = useDebouncedValue(searchTerm)
   const [isMobileCategoryOpen, setIsMobileCategoryOpen] = useState(false)
   const [visibleCount, setVisibleCount] = useState(9)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
-  const loadMoreTimer = useRef(null)
+  const [newPostStartIndex, setNewPostStartIndex] = useState(null)
+  const firstNewPostRef = useRef(null)
 
-  const categories = useMemo(
-    () => ['All Posts', ...Array.from(new Set(learningUpdates.map((update) => update.category).filter(Boolean)))],
-    [learningUpdates],
-  )
-
-  const filteredUpdates = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase()
-
-    return learningUpdates.filter((update) => {
-      const matchesCategory = activeCategory === 'All Posts' || update.category === activeCategory
-      const searchable = [update.title, update.summary, update.category, update.status, ...(update.notes || []), ...getUpdateTags(update)]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-
-      return matchesCategory && (!normalizedSearch || searchable.includes(normalizedSearch))
-    })
-  }, [activeCategory, learningUpdates, searchTerm])
+  const {
+    updates: learningUpdates,
+    categories,
+    total,
+    isLoading,
+  } = useLearningUpdates({
+    category: activeCategory,
+    search: isPage ? debouncedSearchTerm : '',
+    limit: isPage ? visibleCount : 3,
+  })
+  const isSearching = isPage && searchTerm.trim() !== debouncedSearchTerm.trim()
 
   useEffect(() => {
-    if (loadMoreTimer.current) window.clearTimeout(loadMoreTimer.current)
     setIsLoadingMore(false)
+    setNewPostStartIndex(null)
     setVisibleCount(9)
-  }, [activeCategory, searchTerm])
+  }, [activeCategory, debouncedSearchTerm])
 
   useEffect(() => {
-    return () => {
-      if (loadMoreTimer.current) window.clearTimeout(loadMoreTimer.current)
+    if (!isLoading && isLoadingMore && newPostStartIndex !== null && learningUpdates.length > newPostStartIndex) {
+      setIsLoadingMore(false)
     }
-  }, [])
+  }, [isLoading, isLoadingMore, learningUpdates.length, newPostStartIndex])
 
-  if (!learningUpdates.length) {
+  useEffect(() => {
+    if (newPostStartIndex === null) return
+
+    const timer = window.setTimeout(() => setNewPostStartIndex(null), 650)
+    return () => window.clearTimeout(timer)
+  }, [newPostStartIndex])
+
+  useLayoutEffect(() => {
+    if (newPostStartIndex === null || !firstNewPostRef.current) return
+    if (isLoading) return
+    if (learningUpdates.length <= newPostStartIndex) return
+
+    window.requestAnimationFrame(() => {
+      const top = firstNewPostRef.current.getBoundingClientRect().top + window.scrollY - 96
+      window.scrollTo({ top, behavior: 'smooth' })
+    })
+  }, [isLoading, learningUpdates.length, newPostStartIndex])
+
+
+
+  if (!learningUpdates.length && isLoading && !isPage) {
+    return (
+      <section id="updates" className={`c-space bg-black ${isPage ? 'min-h-screen pt-36 pb-20' : 'my-24 scroll-mt-24 py-14'}`}>
+        <UpdatesLoader className="py-16" />
+      </section>
+    )
+  }
+
+  if (!learningUpdates.length && !isPage) {
     return (
       <section id="updates" className={`c-space bg-black ${isPage ? 'min-h-screen pt-36 pb-20' : 'my-24 scroll-mt-24 py-14'}`}>
         <div className="mx-auto max-w-4xl border border-zinc-800 bg-black p-8">
@@ -256,8 +302,8 @@ const LatestUpdates = ({ isPage = false }) => {
     )
   }
 
-  const visibleUpdates = isPage ? filteredUpdates.slice(0, visibleCount) : filteredUpdates.slice(0, 3)
-  const hasMoreUpdates = isPage && visibleCount < filteredUpdates.length
+  const visibleUpdates = learningUpdates
+  const hasMoreUpdates = isPage && visibleUpdates.length < total
 
   const handleMobileCategorySelect = (category) => {
     setActiveCategory(category)
@@ -266,10 +312,8 @@ const LatestUpdates = ({ isPage = false }) => {
 
   const handleShowMore = () => {
     setIsLoadingMore(true)
-    loadMoreTimer.current = window.setTimeout(() => {
-      setVisibleCount((current) => current + 9)
-      setIsLoadingMore(false)
-    }, 420)
+    setNewPostStartIndex(learningUpdates.length)
+    setVisibleCount((current) => current + 9)
   }
 
   return (
@@ -293,7 +337,7 @@ const LatestUpdates = ({ isPage = false }) => {
             </p>
           </div>
 
-          {!isPage && learningUpdates.length > 3 && (
+          {!isPage && total > 3 && (
             <div className="flex shrink-0 justify-start lg:justify-end">
               <Link
                 to="/updates"
@@ -308,18 +352,6 @@ const LatestUpdates = ({ isPage = false }) => {
             </div>
           )}
         </div>
-
-        {(isLoading || error || stale || source !== 'static') && (
-          <div className="mb-8 border border-zinc-800 bg-zinc-950/60 px-5 py-3 text-sm text-zinc-400">
-            {isLoading
-              ? 'Loading latest notes from the content API...'
-              : error
-                ? `Showing fallback notes. ${error}`
-                : stale
-                  ? 'Showing cached notes while Notion is unavailable.'
-                  : `Content served from ${source}.`}
-          </div>
-        )}
 
         <div className="updates-toolbar mb-8 flex flex-row gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="updates-mobile-select">
@@ -387,23 +419,46 @@ const LatestUpdates = ({ isPage = false }) => {
 
           {isPage && (
             <div className="updates-actions flex items-center gap-3">
-              <label className="updates-search flex h-11 min-w-0 items-center gap-3 rounded-full border border-zinc-800 bg-black px-4 text-zinc-500 transition focus-within:border-zinc-600 sm:w-72">
-                <Search className="h-4 w-4" aria-hidden="true" />
+              <label className="updates-search" role="search">
+                {isLoading || isSearching ? (
+                  <Loader2 className="updates-search-spinner" aria-hidden="true" />
+                ) : (
+                  <Search className="h-4 w-4" aria-hidden="true" />
+                )}
                 <input
+                  type="search"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
-                  placeholder="Search notes"
-                  className="min-w-0 flex-1 bg-transparent text-sm text-zinc-200 caret-white outline-none placeholder:text-zinc-500"
+                  placeholder="Search by title, tag, topic..."
+                  aria-label="Search learning notes"
                 />
+                {searchTerm && (
+                  <button
+                    type="button"
+                    className="updates-search-clear"
+                    onClick={() => setSearchTerm('')}
+                    aria-label="Clear search"
+                  >
+                    <X aria-hidden="true" />
+                  </button>
+                )}
               </label>
             </div>
           )}
         </div>
 
+      
+
         {visibleUpdates.length > 0 ? (
           <div className="updates-vercel-grid">
-            {visibleUpdates.map((update) => (
-              <UpdateCard key={update.id} update={update} />
+            {visibleUpdates.map((update, index) => (
+              <UpdateCard
+                key={update.id}
+                update={update}
+                cardRef={index === newPostStartIndex ? firstNewPostRef : null}
+                isNew={newPostStartIndex !== null && index >= newPostStartIndex}
+                enterDelay={newPostStartIndex !== null ? Math.min(index - newPostStartIndex, 5) * 45 : 0}
+              />
             ))}
             {hasMoreUpdates && (
               <div className="updates-show-more-cell">
@@ -418,6 +473,10 @@ const LatestUpdates = ({ isPage = false }) => {
                 </button>
               </div>
             )}
+          </div>
+        ) : isLoading || isSearching ? (
+          <div className="updates-empty-loading">
+            <UpdatesLoader />
           </div>
         ) : (
           <div className="border border-zinc-800 px-8 py-16 text-center">
@@ -434,9 +493,9 @@ const LatestUpdates = ({ isPage = false }) => {
 
 export const UpdateDetail = () => {
   const { updateId } = useParams()
-  const { updates: learningUpdates, isLoading, error, stale } = useLearningUpdates()
+  const { updates: learningUpdates, isLoading } = useLearningUpdates({ updateId })
   const [copied, setCopied] = useState(false)
-  const update = learningUpdates.find((item) => item.slug === updateId || item.id === updateId)
+  const update = learningUpdates[0]
 
   const handleCopyUrl = async () => {
     const url = window.location.href
@@ -453,9 +512,7 @@ export const UpdateDetail = () => {
   if (!update && isLoading) {
     return (
       <section className="c-space min-h-screen bg-black pt-36 pb-20">
-        <div className="mx-auto max-w-4xl border border-zinc-800 bg-black p-8">
-          <p className="text-zinc-400">Loading update...</p>
-        </div>
+        <UpdatesLoader className="py-16" />
       </section>
     )
   }
@@ -489,15 +546,7 @@ export const UpdateDetail = () => {
           </p>
           <h1>{update.title}</h1>
 
-          {(isLoading || error || stale) && (
-            <p className="mt-8 text-center text-sm text-zinc-500">
-              {isLoading
-                ? 'Refreshing from the content API...'
-                : error
-                  ? `Showing fallback content. ${error}`
-                  : 'Showing cached content while Notion is unavailable.'}
-            </p>
-          )}
+          {isLoading && <UpdatesLoader className="mt-8" />}
 
           {/* <div className="mt-9 flex flex-col items-center gap-3 text-sm sm:text-base">
             <div className="flex items-center gap-3">
